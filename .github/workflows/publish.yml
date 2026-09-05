@@ -1,0 +1,59 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  pack:
+    name: Pack NuGet package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Pack
+        run: dotnet pack src/Olfarve/Olfarve.csproj --configuration Release --output artifacts
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nuget-package
+          path: artifacts/
+
+  publish:
+    name: Publish to NuGet.org
+    needs: pack
+    runs-on: ubuntu-latest
+    environment:
+      name: nuget
+      url: https://www.nuget.org/packages/Olfarve/
+    permissions:
+      # Required for NuGet.org trusted publishing; no API key needs to be stored.
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: nuget-package
+          path: artifacts/
+      - name: NuGet login (OIDC -> temporary API key)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          # Set the NUGET_USER repository secret to your nuget.org profile
+          # name (not your email address).
+          user: ${{ secrets.NUGET_USER }}
+      - name: Push
+        run: |
+          dotnet nuget push "artifacts/*.nupkg" \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate

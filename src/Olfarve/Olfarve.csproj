@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Olfarve</RootNamespace>
+    <AssemblyName>Olfarve</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Olfarve</PackageId>
+    <Title>Olfarve</Title>
+    <Description>sRGB color rendering of SRM/EBC beer color values</Description>
+    <PackageTags>beer;brewing;color;colour;srm;ebc;srgb;colorimetry</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Olfarve.Tests" />
+  </ItemGroup>
+
+</Project>
