@@ -19,9 +19,6 @@ values are transformed to sRGB.
 dotnet add package Olfarve
 ```
 
-The package targets .NET 8 and .NET 10 and has no runtime dependencies. It is
-fully cross-platform (Windows, Linux, macOS).
-
 ## Usage
 
 ```csharp
